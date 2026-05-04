@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="لوحة تحكم بسيطة لتعديل المنتجات والاسعار والصور." />
+    <title>لوحة التحكم</title>
+    <link rel="stylesheet" href="store.css" />
+    <link rel="icon" href="assets/store/favicon1.svg" type="image/svg+xml" />
+    <script src="data/store-data.js" defer></script>
+    <script src="store-core.js" defer></script>
+    <script src="admin.js" defer></script>
+  </head>
+  <body class="admin-locked">
+    <header class="app-header">
+      <div class="container header-row">
+        <a class="brand" href="index.html" aria-label="الرجوع للمتجر">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span class="brand-text">
+            <span class="brand-name" data-store-name>متجري</span>
+            <span class="brand-tagline" data-store-tagline></span>
+          </span>
+        </a>
+
+        <div class="header-actions">
+          <button class="icon-btn" type="button" id="themeToggle" aria-label="تبديل الوضع" title="الوضع">
+            <span class="icon" aria-hidden="true" data-icon="theme"></span>
+          </button>
+          <a class="icon-btn" href="index.html" aria-label="فتح المتجر" title="المتجر">
+            <span class="icon" aria-hidden="true" data-icon="search"></span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="container page">
+      <div class="crumbs">
+        <a class="link-btn" href="index.html">
+          <span class="icon" aria-hidden="true" data-icon="back"></span>
+          <span>المتجر</span>
+        </a>
+        <span class="muted tiny">لوحة التحكم</span>
+      </div>
+
+      <section class="admin-grid">
+        <aside class="panel">
+          <h1 class="page-title" style="margin-bottom: 12px">إعدادات</h1>
+          <form id="settingsForm" class="form-grid" novalidate>
+            <label class="field">
+              <span class="field-label">اسم المتجر</span>
+              <input id="storeName" type="text" required />
+            </label>
+            <label class="field">
+              <span class="field-label">سطر صغير</span>
+              <input id="storeTagline" type="text" />
+            </label>
+            <label class="field">
+              <span class="field-label">عنوان الصفحة</span>
+              <input id="storeTitle" type="text" />
+            </label>
+            <div class="split">
+              <label class="field">
+                <span class="field-label">العملة</span>
+                <input id="storeCurrency" type="text" placeholder="EGP" />
+              </label>
+              <label class="field">
+                <span class="field-label">اللغة/المنطقة</span>
+                <input id="storeLocale" type="text" placeholder="ar-EG" />
+              </label>
+            </div>
+            <label class="field">
+              <span class="field-label">واتساب (اختياري)</span>
+              <input id="storeWhatsApp" type="text" placeholder="2010..." />
+            </label>
+            <label class="field">
+              <span class="field-label">لينك واتساب</span>
+              <input id="storeWhatsAppLink" type="url" placeholder="https://wa.me/qr/..." />
+            </label>
+            <label class="field">
+              <span class="field-label">باسورد لوحة التحكم</span>
+              <input id="adminPassword" type="password" autocomplete="new-password" />
+            </label>
+            <div class="split">
+              <label class="field">
+                <span class="field-label">شحن ثابت</span>
+                <input id="shipFlat" type="number" inputmode="numeric" />
+              </label>
+              <label class="field">
+                <span class="field-label">شحن مجاني فوق</span>
+                <input id="shipFreeOver" type="number" inputmode="numeric" />
+              </label>
+            </div>
+
+            <div class="drawer-actions" style="grid-template-columns: 1fr 1fr">
+              <button class="btn btn-primary" type="submit" id="saveSettings">حفظ</button>
+              <button class="btn btn-ghost" type="button" id="resetSettings">إرجاع</button>
+            </div>
+          </form>
+
+          <hr class="hr" />
+
+          <div class="form-grid">
+            <button class="btn btn-primary" type="button" id="saveProducts">حفظ المنتجات</button>
+            <div class="split">
+              <button class="btn btn-ghost" type="button" id="exportJson">تصدير JSON</button>
+              <button class="btn btn-ghost" type="button" id="exportJs">تصدير JS</button>
+            </div>
+            <div class="split">
+              <button class="btn btn-ghost" type="button" id="importJson">استيراد JSON</button>
+              <button class="btn btn-danger" type="button" id="resetProducts">مسح التعديلات</button>
+            </div>
+          </div>
+
+          <div id="importPanel" style="margin-top: 14px; border-top: 1px solid var(--border); padding-top: 14px" hidden>
+            <div class="grid-head" style="margin: 0 0 10px">
+              <h2 class="page-title" style="margin: 0">استيراد</h2>
+              <button class="icon-btn" type="button" id="closeImport" aria-label="إغلاق">
+                <span class="icon" aria-hidden="true" data-icon="close"></span>
+              </button>
+            </div>
+            <label class="field">
+              <span class="field-label">الصق JSON (مصفوفة منتجات)</span>
+              <textarea id="importText" rows="8" spellcheck="false"></textarea>
+            </label>
+            <button class="btn btn-primary btn-wide" type="button" id="applyImport">تطبيق</button>
+          </div>
+        </aside>
+
+        <section class="panel">
+          <div class="grid-head" style="margin: 0 0 10px">
+            <h2 class="page-title" style="margin: 0">المنتجات</h2>
+            <div style="display: flex; gap: 10px; align-items: center">
+              <label class="field" style="min-width: 260px">
+                <span class="field-label">بحث</span>
+                <input id="productSearch" type="search" placeholder="اسم / تصنيف..." />
+              </label>
+              <button class="btn btn-primary" type="button" id="addProduct">إضافة</button>
+            </div>
+          </div>
+
+          <div class="admin-products" id="productsHost"></div>
+        </section>
+      </section>
+    </main>
+
+    <div class="toast-host" id="toastHost" aria-live="polite" aria-relevant="additions text"></div>
+  </body>
+</html>

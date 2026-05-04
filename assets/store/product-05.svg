@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1500" viewBox="0 0 1200 1500">
+  <rect width="1200" height="1500" fill="#f7f6f3"/>
+  <rect x="96" y="96" width="1008" height="1308" rx="52" fill="#ffffff" stroke="#e1ded8" stroke-width="8"/>
+  <rect x="150" y="170" width="900" height="560" rx="44" fill="#0f766e" fill-opacity="0.09"/>
+  <g opacity="0.95">
+    <rect x="210" y="230" width="780" height="440" rx="40" fill="#ffffff" fill-opacity="0.62"/>
+    <path d="M260 320h520" stroke="#0f766e" stroke-opacity="0.30" stroke-width="14" stroke-linecap="round"/>
+    <path d="M260 390h660" stroke="#121316" stroke-opacity="0.16" stroke-width="12" stroke-linecap="round"/>
+    <path d="M260 460h580" stroke="#121316" stroke-opacity="0.14" stroke-width="12" stroke-linecap="round"/>
+    <path d="M260 530h420" stroke="#b45309" stroke-opacity="0.22" stroke-width="12" stroke-linecap="round"/>
+  </g>
+  <text x="600" y="900" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,Arial" font-size="60" fill="#121316">Sample Product</text>
+  <text x="600" y="980" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,Arial" font-size="30" fill="#5c606b">Replace with your own photo</text>
+  <g opacity="0.9">
+    <path d="M420 1160h360" stroke="#0f766e" stroke-opacity="0.22" stroke-width="16" stroke-linecap="round"/>
+    <path d="M510 1220h180" stroke="#b45309" stroke-opacity="0.18" stroke-width="16" stroke-linecap="round"/>
+  </g>
+</svg>
+

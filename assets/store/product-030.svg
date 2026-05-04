@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1500" viewBox="0 0 1200 1500">
+  <rect width="1200" height="1500" fill="#f7f6f3"/>
+  <rect x="96" y="96" width="1008" height="1308" rx="52" fill="#ffffff" stroke="#e1ded8" stroke-width="8"/>
+  <rect x="150" y="170" width="900" height="560" rx="44" fill="#121316" fill-opacity="0.06"/>
+  <g opacity="0.95">
+    <rect x="210" y="240" width="780" height="120" rx="60" fill="#0f766e" fill-opacity="0.12"/>
+    <rect x="210" y="410" width="520" height="120" rx="60" fill="#b45309" fill-opacity="0.12"/>
+    <rect x="210" y="580" width="680" height="120" rx="60" fill="#121316" fill-opacity="0.08"/>
+  </g>
+  <text x="600" y="930" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,Arial" font-size="60" fill="#121316">Sample Product</text>
+  <text x="600" y="1010" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,Arial" font-size="30" fill="#5c606b">Replace with your image</text>
+  <path d="M320 1180h560" stroke="#0f766e" stroke-opacity="0.22" stroke-width="14" stroke-linecap="round"/>
+</svg>
+

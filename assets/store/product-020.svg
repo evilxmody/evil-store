@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1500" viewBox="0 0 1200 1500">
+  <rect width="1200" height="1500" fill="#f7f6f3"/>
+  <rect x="96" y="96" width="1008" height="1308" rx="52" fill="#ffffff" stroke="#e1ded8" stroke-width="8"/>
+  <g opacity="0.9">
+    <rect x="170" y="180" width="860" height="420" rx="44" fill="#0f766e" fill-opacity="0.12"/>
+    <path d="M240 520c170-240 420-240 600 0" fill="none" stroke="#0f766e" stroke-opacity="0.26" stroke-width="16" stroke-linecap="round"/>
+    <path d="M280 260h640" stroke="#b45309" stroke-opacity="0.22" stroke-width="12" stroke-linecap="round"/>
+    <path d="M280 320h420" stroke="#b45309" stroke-opacity="0.18" stroke-width="12" stroke-linecap="round"/>
+  </g>
+  <text x="600" y="900" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,Arial" font-size="60" fill="#121316">Sample Product</text>
+  <text x="600" y="980" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,Arial" font-size="30" fill="#5c606b">Drop your photo here</text>
+  <g opacity="0.9">
+    <circle cx="420" cy="1150" r="26" fill="#0f766e" fill-opacity="0.18"/>
+    <circle cx="600" cy="1150" r="26" fill="#b45309" fill-opacity="0.18"/>
+    <circle cx="780" cy="1150" r="26" fill="#121316" fill-opacity="0.08"/>
+  </g>
+</svg>
+

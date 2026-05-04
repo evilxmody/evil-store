@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1500" viewBox="0 0 1200 1500">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f766e" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#b45309" stop-opacity="0.14"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1500" fill="#f7f6f3"/>
+  <rect x="96" y="96" width="1008" height="1308" rx="52" fill="#ffffff" stroke="#e1ded8" stroke-width="8"/>
+  <rect x="150" y="150" width="900" height="520" rx="40" fill="url(#g)"/>
+  <circle cx="300" cy="410" r="150" fill="#0f766e" fill-opacity="0.16"/>
+  <circle cx="860" cy="320" r="180" fill="#b45309" fill-opacity="0.14"/>
+  <text x="600" y="880" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,Arial" font-size="60" fill="#121316">Sample Product</text>
+  <text x="600" y="960" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,Arial" font-size="30" fill="#5c606b">Replace this image with yours</text>
+  <rect x="360" y="1080" width="480" height="64" rx="32" fill="#0f766e" fill-opacity="0.12"/>
+</svg>
+

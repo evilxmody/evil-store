@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="صفحة منتج." />
+    <title>منتج</title>
+    <link rel="stylesheet" href="store.css" />
+    <link rel="icon" href="assets/store/favicon.svg" type="image/svg+xml" />
+    <script src="data/store-data.js" defer></script>
+    <script src="store-core.js" defer></script>
+    <script src="product.js" defer></script>
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="container header-row">
+        <a class="brand" href="index.html" aria-label="الرجوع للمتجر">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span class="brand-text">
+            <span class="brand-name" data-store-name>متجري</span>
+            <span class="brand-tagline" data-store-tagline></span>
+          </span>
+        </a>
+
+        <div class="header-actions">
+          <button class="icon-btn" type="button" id="themeToggle" aria-label="تبديل الوضع" title="الوضع">
+            <span class="icon" aria-hidden="true" data-icon="theme"></span>
+          </button>
+          <button class="icon-btn" type="button" id="accountOpen" aria-label="تسجيل العميل" title="الحساب">
+            <span class="icon" aria-hidden="true" data-icon="user"></span>
+          </button>
+          <button class="icon-btn cart-btn" type="button" id="cartOpen" aria-label="فتح سلة المشتريات" title="السلة">
+            <span class="icon" aria-hidden="true" data-icon="cart"></span>
+            <span class="badge" id="cartCount" aria-label="عدد العناصر">0</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container page">
+      <div class="crumbs">
+        <a class="link-btn" href="index.html">
+          <span class="icon" aria-hidden="true" data-icon="back"></span>
+          <span>رجوع</span>
+        </a>
+        <span class="muted tiny" id="productCategory"></span>
+      </div>
+
+      <section class="two-col">
+        <div class="panel gallery">
+          <div class="product-slider" id="productSlider" aria-label="صور المنتج" tabindex="0">
+            <div class="slider-track" id="sliderTrack"></div>
+            <button class="icon-btn slider-btn prev" type="button" id="slidePrev" aria-label="الصورة السابقة" title="السابق">
+              <span class="icon" aria-hidden="true" data-icon="back"></span>
+            </button>
+            <button class="icon-btn slider-btn next" type="button" id="slideNext" aria-label="الصورة التالية" title="التالي">
+              <span class="icon" aria-hidden="true" data-icon="back"></span>
+            </button>
+            <div class="slider-dots" id="sliderDots" aria-label="مؤشر الصور"></div>
+          </div>
+          <div class="zoom-preview" id="zoomPreview" aria-hidden="true"></div>
+          <div class="thumbs" id="thumbs" aria-label="صور مصغرة"></div>
+        </div>
+
+        <div class="panel">
+          <h1 class="product-title" id="productTitle"></h1>
+          <div class="price-row" style="margin-top: 10px">
+            <div class="price">
+              <span id="productPrice"></span>
+              <span class="compare" id="productCompare" hidden></span>
+            </div>
+          </div>
+          <div class="product-meta" id="productMeta" style="margin-top: 10px">
+            <div class="meta-row">
+              <span class="muted">كود المنتج</span>
+              <strong id="productSku"></strong>
+            </div>
+            <div class="meta-row">
+              <span class="muted">التوفر</span>
+              <strong id="productStock"></strong>
+            </div>
+          </div>
+          <p class="desc" id="productDesc" style="margin-top: 10px"></p>
+          <ul class="bullets" id="productHighlights" hidden></ul>
+          <div class="specs" id="productSpecs" hidden></div>
+
+          <hr class="hr" />
+
+          <div class="form-grid">
+            <div class="split">
+              <label class="field">
+                <span class="field-label">الكمية</span>
+                <input id="qtyInput" type="number" inputmode="numeric" min="1" max="99" value="1" />
+              </label>
+              <label class="field">
+                <span class="field-label">ملاحظة</span>
+                <input id="noteInput" type="text" placeholder="اختياري" />
+              </label>
+            </div>
+            <button class="btn btn-primary btn-wide" type="button" id="addToCartBtn">إضافة للسلة</button>
+            <a class="btn btn-ghost btn-wide" href="checkout.html">الذهاب لإتمام الطلب</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="drawer-overlay" id="drawerOverlay" hidden></div>
+    <aside class="drawer" id="cartDrawer" aria-hidden="true" aria-label="سلة المشتريات">
+      <header class="drawer-head">
+        <h2 class="drawer-title">سلة المشتريات</h2>
+        <button class="icon-btn" type="button" id="cartClose" aria-label="إغلاق السلة" title="إغلاق">
+          <span class="icon" aria-hidden="true" data-icon="close"></span>
+        </button>
+      </header>
+      <div class="drawer-body" id="cartItems"></div>
+      <footer class="drawer-foot">
+        <div class="totals">
+          <div class="totals-row">
+            <span class="muted">الإجمالي</span>
+            <strong id="cartTotal">0</strong>
+          </div>
+        </div>
+        <div class="drawer-actions">
+          <a class="btn btn-primary" href="checkout.html">الذهاب لاتمام الطلب</a>
+          <button class="btn btn-ghost" type="button" id="cartClear">تفريغ</button>
+        </div>
+      </footer>
+    </aside>
+
+    <div class="zoom-overlay" id="zoomOverlay" hidden aria-hidden="true" aria-label="تكبير صورة المنتج">
+      <img class="zoom-image" id="zoomImage" alt="" draggable="false" />
+    </div>
+
+    <div class="toast-host" id="toastHost" aria-live="polite" aria-relevant="additions text"></div>
+  </body>
+</html>

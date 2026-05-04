@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="    الي بتدور عليه هنا ياBrooo😉" />
+    <title>EVIL | STORE</title>
+    <link rel="stylesheet" href="store.css" />
+    <link rel="icon" href="assets/store/favicon.png" type="image/PNG" />
+    <script src="data/store-data.js" defer></script>
+    <script src="store-core.js" defer></script>
+    <script src="store.js" defer></script>
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="container header-row">
+        <a class="brand" href="index.html" aria-label="الصفحة الرئيسية">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span class="brand-text">
+            <span class="brand-name" data-store-name>EVIL | STORE</span>
+            <span class="brand-tagline" data-store-tagline>منتجات مختارة بعناية</span>
+          </span>
+        </a>
+
+        <div class="header-controls" role="search">
+          <label class="field field-search">
+            <span class="icon" aria-hidden="true" data-icon="search"></span>
+            <input id="searchInput" type="search" inputmode="search" placeholder="ابحث عن منتج..." autocomplete="off" />
+          </label>
+
+          <label class="field">
+            <span class="field-label">التصنيف</span>
+            <select id="categorySelect" aria-label="اختيار التصنيف"></select>
+          </label>
+
+          <label class="field">
+            <span class="field-label">الترتيب</span>
+            <select id="sortSelect" aria-label="اختيار الترتيب">
+              <option value="featured">المميز</option>
+              <option value="newest">الأحدث</option>
+              <option value="priceAsc">السعر: الأقل</option>
+              <option value="priceDesc">السعر: الأعلى</option>
+              <option value="nameAsc">الاسم: أ-ي</option>
+            </select>
+          </label>
+
+          <div class="header-actions">
+            <button class="icon-btn" type="button" id="themeToggle" aria-label="تبديل الوضع" title="الوضع">
+              <span class="icon" aria-hidden="true" data-icon="theme"></span>
+            </button>
+            <button class="icon-btn" type="button" id="accountOpen" aria-label="تسجيل العميل" title="الحساب">
+              <span class="icon" aria-hidden="true" data-icon="user"></span>
+            </button>
+            <button class="icon-btn cart-btn" type="button" id="cartOpen" aria-label="فتح سلة المشتريات" title="السلة">
+              <span class="icon" aria-hidden="true" data-icon="cart"></span>
+              <span class="badge" id="cartCount" aria-label="عدد العناصر">0</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="container main">
+      <section class="grid-head">
+        <h1 class="page-title" data-store-title>المتجر</h1>
+        <a class="subtle-link" href="admin.html" title="لوحة التحكم">لوحة التحكم</a>
+      </section>
+
+      <section id="productsSection" aria-label="المنتجات">
+        <div id="productsGrid" class="products-grid" aria-live="polite"></div>
+        <div id="emptyState" class="empty-state" hidden>
+          <p class="empty-title">لا توجد نتائج.</p>
+          <p class="empty-subtitle">جرّب كلمات بحث مختلفة أو غيّر التصنيف.</p>
+        </div>
+      </section>
+    </main>
+  
+
+    <div class="drawer-overlay" id="drawerOverlay" hidden></div>
+    <aside class="drawer" id="cartDrawer" aria-hidden="true" aria-label="سلة المشتريات">
+      <header class="drawer-head">
+        <h2 class="drawer-title">سلة المشتريات</h2>
+        <button class="icon-btn" type="button" id="cartClose" aria-label="إغلاق السلة" title="إغلاق">
+          <span class="icon" aria-hidden="true" data-icon="close"></span>
+        </button>
+      </header>
+      <div class="drawer-body" id="cartItems"></div>
+      <footer class="drawer-foot">
+        <div class="totals">
+          <div class="totals-row">
+            <span class="muted">الإجمالي</span>
+            <strong id="cartTotal">0</strong>
+          </div>
+        </div>
+        <div class="drawer-actions">
+          <a class="btn btn-primary" href="checkout.html">الذهاب لاتمام الطلب</a>
+          <button class="btn btn-ghost" type="button" id="cartClear">تفريغ</button>
+        </div>
+      </footer>
+    </aside>
+
+    <div class="toast-host" id="toastHost" aria-live="polite" aria-relevant="additions text"></div>
+  </body>
+</html>

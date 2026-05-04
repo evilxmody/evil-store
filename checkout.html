@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="إتمام الطلب." />
+    <title>إتمام الطلب</title>
+    <link rel="stylesheet" href="store.css" />
+    <link rel="icon" href="assets/store/favicon.svg" type="image/svg+xml" />
+    <script src="data/store-data.js" defer></script>
+    <script src="store-core.js" defer></script>
+    <script src="checkout.js" defer></script>
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="container header-row">
+        <a class="brand" href="index.html" aria-label="الرجوع للمتجر">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span class="brand-text">
+            <span class="brand-name" data-store-name>متجري</span>
+            <span class="brand-tagline" data-store-tagline></span>
+          </span>
+        </a>
+
+        <div class="header-actions">
+          <button class="icon-btn" type="button" id="themeToggle" aria-label="تبديل الوضع" title="الوضع">
+            <span class="icon" aria-hidden="true" data-icon="theme"></span>
+          </button>
+          <button class="icon-btn" type="button" id="accountOpen" aria-label="تسجيل العميل" title="الحساب">
+            <span class="icon" aria-hidden="true" data-icon="user"></span>
+          </button>
+          <a class="icon-btn" href="index.html" aria-label="العودة للتسوق" title="التسوق">
+            <span class="icon" aria-hidden="true" data-icon="search"></span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="container page">
+      <div class="crumbs">
+        <a class="link-btn" href="index.html">
+          <span class="icon" aria-hidden="true" data-icon="back"></span>
+          <span>متابعة التسوق</span>
+        </a>
+        <span class="muted tiny">إتمام الطلب</span>
+      </div>
+
+      <section class="two-col">
+        <div class="panel">
+          <h1 class="page-title" style="margin-bottom: 12px">بيانات العميل</h1>
+          <form id="checkoutForm" class="form-grid" novalidate>
+            <div class="split">
+              <label class="field">
+                <span class="field-label">الاسم</span>
+                <input id="nameInput" type="text" autocomplete="name" required />
+              </label>
+              <label class="field">
+                <span class="field-label">رقم الموبايل</span>
+                <input id="phoneInput" type="tel" inputmode="tel" autocomplete="tel" required />
+              </label>
+            </div>
+            <div class="split">
+              <label class="field">
+                <span class="field-label">المحافظة / المدينة</span>
+                <input id="cityInput" type="text" autocomplete="address-level1" />
+              </label>
+              <label class="field">
+                <span class="field-label">الدفع</span>
+                <select id="paymentSelect" aria-label="طريقة الدفع">
+                  <option value="cod">الدفع عند الاستلام</option>
+                  <option value="bank">تحويل بنكي</option>
+                  <option value="wallet">Vodafone Cash</option>
+                </select>
+              </label>
+            </div>
+            <label class="field">
+              <span class="field-label">العنوان</span>
+              <textarea id="addressInput" rows="3" autocomplete="street-address" required></textarea>
+            </label>
+            <label class="field">
+              <span class="field-label">ملاحظات</span>
+              <textarea id="notesInput" rows="2" placeholder="اختياري"></textarea>
+            </label>
+
+            <button class="btn btn-primary btn-wide" type="submit" id="placeOrderBtn">تأكيد الطلب</button>
+            <div id="afterOrder" hidden></div>
+          </form>
+        </div>
+
+        <aside class="panel">
+          <h2 class="page-title" style="margin-bottom: 12px">ملخص الطلب</h2>
+          <div id="orderItems" class="summary"></div>
+          <hr class="hr" />
+          <div class="summary">
+            <div class="summary-item">
+              <span class="muted">إجمالي المنتجات</span>
+              <strong id="subtotalEl">0</strong>
+            </div>
+            <div class="summary-item">
+              <span class="muted">الشحن</span>
+              <strong id="shippingEl">0</strong>
+            </div>
+            <div class="summary-item">
+              <span class="muted">الإجمالي النهائي</span>
+              <strong id="totalEl">0</strong>
+            </div>
+          </div>
+          <div id="emptyCartPanel" class="empty-state" hidden>
+            <p class="empty-title">مفيش منتجات في السلة.</p>
+            <p class="empty-subtitle">ارجع للمتجر واضف منتجات.</p>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <div class="toast-host" id="toastHost" aria-live="polite" aria-relevant="additions text"></div>
+  </body>
+</html>
