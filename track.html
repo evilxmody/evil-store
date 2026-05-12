@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="متابعة الطلب والشحن." />
+    <title>متابعة الطلب</title>
+    <link rel="stylesheet" href="store.css" />
+    <link rel="icon" href="assets/store/evil-logo.png" type="image/png" />
+    <script src="data/store-data.js" defer></script>
+    <script src="store-core.js" defer></script>
+    <script src="track.js" defer></script>
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="container header-row">
+        <a class="brand" href="index.html" aria-label="الرجوع للمتجر">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span class="brand-text">
+            <span class="brand-name" data-store-name>متجري</span>
+            <span class="brand-tagline" data-store-tagline></span>
+          </span>
+        </a>
+
+        <div class="header-actions">
+          <button class="icon-btn" type="button" id="themeToggle" aria-label="تبديل الوضع" title="الوضع">
+            <span class="icon" aria-hidden="true" data-icon="theme"></span>
+          </button>
+          <button class="icon-btn" type="button" id="accountOpen" aria-label="تسجيل العميل" title="الحساب">
+            <span class="icon" aria-hidden="true" data-icon="user"></span>
+          </button>
+          <a class="icon-btn" href="index.html" aria-label="العودة للتسوق" title="التسوق">
+            <span class="icon" aria-hidden="true" data-icon="search"></span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="container page">
+      <div class="crumbs">
+        <a class="link-btn" href="index.html">
+          <span class="icon" aria-hidden="true" data-icon="back"></span>
+          <span>المتجر</span>
+        </a>
+        <span class="muted tiny">متابعة الطلب</span>
+      </div>
+
+      <section class="two-col">
+        <div class="panel">
+          <h1 class="page-title" style="margin-bottom: 12px">متابعة الطلب</h1>
+          <form id="trackForm" class="form-grid" novalidate>
+            <label class="field">
+              <span class="field-label">رقم الأوردر</span>
+              <input id="trackOrderInput" type="text" autocomplete="off" placeholder="ORD-..." />
+            </label>
+            <label class="field">
+              <span class="field-label">رقم الموبايل</span>
+              <input id="trackPhoneInput" type="tel" inputmode="tel" autocomplete="tel" placeholder="+2010..." />
+            </label>
+            <button class="btn btn-primary btn-wide" type="submit">عرض الطلب</button>
+          </form>
+
+          <div id="trackResult" class="track-result"></div>
+        </div>
+
+        <aside class="panel">
+          <h2 class="page-title" style="margin-bottom: 12px">طلباتي المحفوظة</h2>
+          <div id="savedOrders" class="orders-list"></div>
+        </aside>
+      </section>
+    </main>
+
+    <div class="toast-host" id="toastHost" aria-live="polite" aria-relevant="additions text"></div>
+  </body>
+</html>

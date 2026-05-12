@@ -1,19 +1,4 @@
-window.STORE_CONFIG = {
-  "name": "evil store",
-  "tagline": "الي بتدور عليه هنا ياBrooo😉",
-  "title": "المنتجات",
-  "currency": "EGP",
-  "locale": "ar-EG",
-  "whatsappPhone": "+201096817968",
-  "whatsappLink": "https://wa.me/qr/T2ANGVAQ6YPDK1",
-  "adminPassword": "312007",
-  "shipping": {
-    "flatFee": 75,
-    "freeOver": 1200
-  }
-};
-
-window.STORE_PRODUCTS = [
+[
   {
     "id": "p-898d491c-19df53dea09",
     "name": "lacoste",
@@ -27,7 +12,7 @@ window.STORE_PRODUCTS = [
       "assets/store/lacoste2.jpg",
       "assets/store/lacoste3.jpg",
       "assets/store/lacoste1.jpg",
-      "assets/store/lacoste.jpg"
+      "assets/store/lacoste"
     ],
     "description": "اسوره لاكوست ميرور",
     "highlights": [
@@ -258,4 +243,4 @@ window.STORE_PRODUCTS = [
       }
     ]
   }
-];
+]

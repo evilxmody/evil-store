@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="ar" dir="rtl">
   <head>
     <meta charset="utf-8" />
@@ -6,7 +6,7 @@
     <meta name="description" content="صفحة منتج." />
     <title>منتج</title>
     <link rel="stylesheet" href="store.css" />
-    <link rel="icon" href="assets/store/evil-logo.png" type="image/png" />
+    <link rel="icon" href="assets/store/favicon.svg" type="image/svg+xml" />
     <script src="data/store-data.js" defer></script>
     <script src="store-core.js" defer></script>
     <script src="product.js" defer></script>
@@ -26,12 +26,6 @@
           <button class="icon-btn" type="button" id="themeToggle" aria-label="تبديل الوضع" title="الوضع">
             <span class="icon" aria-hidden="true" data-icon="theme"></span>
           </button>
-          <button class="icon-btn" type="button" id="accountOpen" aria-label="تسجيل العميل" title="الحساب">
-            <span class="icon" aria-hidden="true" data-icon="user"></span>
-          </button>
-          <a class="icon-btn" href="track.html" aria-label="متابعة الطلبات" title="طلباتي">
-            <span class="icon" aria-hidden="true" data-icon="orders"></span>
-          </a>
           <button class="icon-btn cart-btn" type="button" id="cartOpen" aria-label="فتح سلة المشتريات" title="السلة">
             <span class="icon" aria-hidden="true" data-icon="cart"></span>
             <span class="badge" id="cartCount" aria-label="عدد العناصر">0</span>
@@ -61,7 +55,6 @@
             </button>
             <div class="slider-dots" id="sliderDots" aria-label="مؤشر الصور"></div>
           </div>
-          <div class="zoom-preview" id="zoomPreview" aria-hidden="true"></div>
           <div class="thumbs" id="thumbs" aria-label="صور مصغرة"></div>
         </div>
 
@@ -130,9 +123,7 @@
       </footer>
     </aside>
 
-    <div class="zoom-overlay" id="zoomOverlay" hidden aria-hidden="true" aria-label="تكبير صورة المنتج">
-      <img class="zoom-image" id="zoomImage" alt="" draggable="false" />
-    </div>
+  
 
     <div class="toast-host" id="toastHost" aria-live="polite" aria-relevant="additions text"></div>
   </body>

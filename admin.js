@@ -29,6 +29,19 @@
     textarea.dispatchEvent(new Event("input", { bubbles: true }));
   }
 
+  function fmtDate(value) {
+    if (!value) return "";
+    try {
+      return new Intl.DateTimeFormat("ar-EG", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
+    } catch {
+      return String(value);
+    }
+  }
+
+  function statusClass(status) {
+    return "status-" + String(status || "pending");
+  }
+
   function wireAdminGate(config) {
     const expectedPasswords = new Set(
       [window.STORE_CONFIG?.adminPassword, config?.adminPassword, "312007"]
@@ -384,6 +397,184 @@
     };
   }
 
+  function renderOrders(host, archived = false) {
+    if (!host) return;
+    const orders = Storefront.ordersLoad().filter((order) => Boolean(order.archived) === archived);
+    host.innerHTML = "";
+
+    if (!orders.length) {
+      const empty = document.createElement("div");
+      empty.className = "empty-state";
+      empty.innerHTML = archived
+        ? '<p class="empty-title">الأرشيف فاضي.</p><p class="empty-subtitle">الطلبات المرفوضة أو المؤرشفة هتظهر هنا.</p>'
+        : '<p class="empty-title">مفيش طلبات لسه.</p><p class="empty-subtitle">أي طلب جديد هيظهر هنا للموافقة أو الرفض.</p>';
+      host.appendChild(empty);
+      return;
+    }
+
+    orders.forEach((order) => {
+      const card = document.createElement("article");
+      card.className = "admin-order-card";
+
+      const head = document.createElement("div");
+      head.className = "order-head";
+      const title = document.createElement("div");
+      title.innerHTML =
+        '<span class="muted tiny">رقم الأوردر</span><strong class="order-id">' +
+        order.id +
+        '</strong><span class="muted tiny">' +
+        fmtDate(order.createdAt) +
+        "</span>";
+      const pill = document.createElement("span");
+      pill.className = "status-pill " + statusClass(order.status);
+      pill.textContent = Storefront.orderStatusLabel(order.status);
+      head.appendChild(title);
+      head.appendChild(pill);
+
+      const meta = document.createElement("div");
+      meta.className = "order-meta";
+      meta.innerHTML =
+        '<div><span class="muted tiny">العميل</span><strong>' +
+        (order.customer?.name || "-") +
+        '</strong></div><div><span class="muted tiny">الموبايل</span><strong>' +
+        (order.customer?.phone || "-") +
+        '</strong></div><div><span class="muted tiny">الإجمالي</span><strong>' +
+        (order.totals?.total || "0") +
+        "</strong></div>";
+
+      const details = document.createElement("details");
+      details.className = "admin-order-details";
+      details.open = true;
+      const summary = document.createElement("summary");
+      summary.className = "subtle-link";
+      summary.textContent = "تفاصيل الطلب";
+      const detailsGrid = document.createElement("div");
+      detailsGrid.className = "order-details-grid";
+
+      function detailField(label, value) {
+        const box = document.createElement("div");
+        const small = document.createElement("span");
+        small.className = "muted tiny";
+        small.textContent = label;
+        const strong = document.createElement("strong");
+        strong.textContent = value || "-";
+        box.appendChild(small);
+        box.appendChild(strong);
+        return box;
+      }
+
+      detailsGrid.appendChild(detailField("العنوان", order.customer?.address));
+      detailsGrid.appendChild(detailField("المحافظة / المدينة", order.customer?.city));
+      detailsGrid.appendChild(detailField("طريقة الدفع", order.customer?.payment));
+      detailsGrid.appendChild(detailField("ملاحظات العميل", order.customer?.notes));
+      detailsGrid.appendChild(detailField("إجمالي المنتجات", order.totals?.subtotal));
+      detailsGrid.appendChild(detailField("الشحن", order.totals?.shipping));
+      detailsGrid.appendChild(detailField("آخر تحديث", fmtDate(order.updatedAt)));
+      details.appendChild(summary);
+      details.appendChild(detailsGrid);
+
+      const items = document.createElement("div");
+      items.className = "summary";
+      (order.items || []).forEach((it) => {
+        const row = document.createElement("div");
+        row.className = "summary-item";
+        row.innerHTML = "<span>" + it.name + " × " + it.qty + "</span><strong>" + it.lineTotal + "</strong>";
+        items.appendChild(row);
+      });
+
+      const history = document.createElement("ol");
+      history.className = "timeline";
+      (order.history || []).forEach((step) => {
+        const li = document.createElement("li");
+        li.className = statusClass(step.status);
+        const strong = document.createElement("strong");
+        strong.textContent = Storefront.orderStatusLabel(step.status);
+        const span = document.createElement("span");
+        span.className = "muted tiny";
+        span.textContent = fmtDate(step.at) + (step.note ? " - " + step.note : "");
+        li.appendChild(strong);
+        li.appendChild(span);
+        history.appendChild(li);
+      });
+
+      const rejectField = document.createElement("label");
+      rejectField.className = "field rejection-field";
+      const rejectLabel = document.createElement("span");
+      rejectLabel.className = "field-label";
+      rejectLabel.textContent = "سبب الرفض";
+      const rejectReason = document.createElement("textarea");
+      rejectReason.rows = 2;
+      rejectReason.placeholder = "مثال: المنتج غير متوفر / بيانات العنوان ناقصة";
+      rejectField.appendChild(rejectLabel);
+      rejectField.appendChild(rejectReason);
+
+      const actions = document.createElement("div");
+      actions.className = "drawer-actions order-actions";
+      if (archived) {
+        const restore = document.createElement("button");
+        restore.type = "button";
+        restore.className = "btn btn-primary";
+        restore.textContent = "استرجاع من الأرشيف";
+        restore.addEventListener("click", () => {
+          Storefront.orderRestore(order.id);
+          Storefront.toast("تم استرجاع الطلب", order.id);
+          renderOrders(host, true);
+          renderOrders(qs("ordersHost"), false);
+        });
+        actions.appendChild(restore);
+      } else {
+        [
+          ["approved", "قبول"],
+          ["rejected", "رفض"],
+          ["shipped", "تم الشحن"],
+          ["delivered", "تم التسليم"]
+        ].forEach(([status, label]) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = status === "rejected" ? "btn btn-danger" : "btn btn-primary";
+          btn.textContent = label;
+          btn.disabled = order.status === status || order.status === "cancelled";
+          btn.addEventListener("click", () => {
+            const reason = String(rejectReason.value || "").trim();
+            if (status === "rejected" && !reason) {
+              Storefront.toast("اكتب سبب الرفض", order.id);
+              rejectReason.focus();
+              return;
+            }
+            const note = status === "rejected" ? "سبب الرفض: " + reason : label + " من الأدمن";
+            Storefront.orderSetStatus(order.id, status, note);
+            if (status === "rejected") Storefront.orderArchive(order.id);
+            Storefront.toast(status === "rejected" ? "اترفض واتنقل للأرشيف" : "تم تحديث الطلب", order.id);
+            renderOrders(host, false);
+            renderOrders(qs("ordersArchiveHost"), true);
+          });
+          actions.appendChild(btn);
+        });
+
+        const archive = document.createElement("button");
+        archive.type = "button";
+        archive.className = "btn btn-ghost";
+        archive.textContent = "أرشفة";
+        archive.addEventListener("click", () => {
+          Storefront.orderArchive(order.id);
+          Storefront.toast("اتنقل للأرشيف", order.id);
+          renderOrders(host, false);
+          renderOrders(qs("ordersArchiveHost"), true);
+        });
+        actions.appendChild(archive);
+      }
+
+      card.appendChild(head);
+      card.appendChild(meta);
+      card.appendChild(details);
+      card.appendChild(items);
+      card.appendChild(history);
+      if (!archived) card.appendChild(rejectField);
+      card.appendChild(actions);
+      host.appendChild(card);
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     const themeToggle = qs("themeToggle");
     if (themeToggle) {
@@ -441,6 +632,10 @@
     const importText = qs("importText");
     const applyImport = qs("applyImport");
     const productSearch = qs("productSearch");
+    const ordersHost = qs("ordersHost");
+    const refreshOrders = qs("refreshOrders");
+    const ordersArchiveHost = qs("ordersArchiveHost");
+    const refreshArchive = qs("refreshArchive");
 
     function renderProducts(products) {
       if (!host) return;
@@ -454,6 +649,10 @@
     }
 
     renderProducts(loadCurrentProducts());
+    renderOrders(ordersHost, false);
+    renderOrders(ordersArchiveHost, true);
+    if (refreshOrders) refreshOrders.addEventListener("click", () => renderOrders(ordersHost, false));
+    if (refreshArchive) refreshArchive.addEventListener("click", () => renderOrders(ordersArchiveHost, true));
 
     if (addBtn) {
       addBtn.addEventListener("click", () => {

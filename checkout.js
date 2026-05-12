@@ -194,6 +194,8 @@
       const order = {
         id,
         createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        status: "pending",
         customer: { name, phone, city, address, notes, payment },
         items,
         totals: {
@@ -201,10 +203,11 @@
           shipping: formatter.format(totals.shipping),
           total: formatter.format(totals.total),
           currency: config.currency || "EGP"
-        }
+        },
+        history: [{ status: "pending", note: "تم استلام الطلب", at: new Date().toISOString() }]
       };
 
-      Storefront.saveToStorage(Storefront.STORAGE.lastOrder, JSON.stringify(order));
+      Storefront.orderUpsert(order);
       Storefront.cartClear();
       Storefront.toast("تم تأكيد الطلب", order.id);
 
@@ -233,10 +236,16 @@
         actions.style.marginTop = "12px";
         actions.style.gridTemplateColumns = "1fr";
 
+        const track = document.createElement("a");
+        track.className = "btn btn-primary btn-wide";
+        track.href = "track.html?id=" + encodeURIComponent(order.id);
+        track.textContent = "متابعة الطلب";
+
         const back = document.createElement("a");
         back.className = "btn btn-ghost btn-wide";
         back.href = "index.html";
         back.textContent = "الرجوع للمتجر";
+        actions.appendChild(track);
         actions.appendChild(back);
 
         const msg = buildWhatsAppText(config, order);
@@ -262,6 +271,9 @@
       cart = Storefront.cartLoad();
       renderSummary(products, cart, formatter, config);
       disableForm(true);
+      window.setTimeout(() => {
+        window.location.href = "track.html?id=" + encodeURIComponent(order.id);
+      }, 900);
     });
 
     window.addEventListener("storefront:accountchange", () => {

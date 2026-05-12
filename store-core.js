@@ -5,6 +5,7 @@
     products: "storefront_products_v1",
     config: "storefront_config_v1",
     lastOrder: "storefront_last_order_v1",
+    orders: "storefront_orders_v1",
     account: "storefront_account_v1",
     customers: "storefront_customers_v1"
   };
@@ -331,6 +332,99 @@
     return Math.max(0, flat);
   }
 
+  const ORDER_STATUSES = {
+    pending: "قيد المراجعة",
+    approved: "تم قبول الطلب",
+    rejected: "مرفوض",
+    shipped: "تم الشحن",
+    delivered: "تم التسليم",
+    cancelled: "ملغي"
+  };
+
+  function normalizeOrder(order) {
+    if (!order || typeof order !== "object") return null;
+    const id = String(order.id || "").trim();
+    if (!id) return null;
+    const customer = order.customer || {};
+    const status = ORDER_STATUSES[order.status] ? order.status : "pending";
+    return {
+      ...order,
+      id,
+      status,
+      archived: Boolean(order.archived),
+      createdAt: order.createdAt || new Date().toISOString(),
+      updatedAt: order.updatedAt || order.createdAt || new Date().toISOString(),
+      customer: {
+        ...customer,
+        name: cleanName(customer.name),
+        phone: normalizePhone(customer.phone),
+        phoneKey: phoneDigits(customer.phone)
+      },
+      items: Array.isArray(order.items) ? order.items : [],
+      history: Array.isArray(order.history) ? order.history : []
+    };
+  }
+
+  function ordersLoad() {
+    const stored = loadFromStorage(STORAGE.orders);
+    const parsed = stored ? safeJsonParse(stored, []) : [];
+    return (Array.isArray(parsed) ? parsed : []).map(normalizeOrder).filter(Boolean);
+  }
+
+  function ordersSave(orders) {
+    const list = (Array.isArray(orders) ? orders : []).map(normalizeOrder).filter(Boolean);
+    return saveToStorage(STORAGE.orders, JSON.stringify(list));
+  }
+
+  function orderGet(id) {
+    const clean = String(id || "").trim();
+    return ordersLoad().find((order) => order.id === clean) || null;
+  }
+
+  function orderUpsert(order) {
+    const next = normalizeOrder(order);
+    if (!next) return null;
+    const list = ordersLoad();
+    const idx = list.findIndex((it) => it.id === next.id);
+    if (idx >= 0) list[idx] = next;
+    else list.unshift(next);
+    ordersSave(list);
+    saveToStorage(STORAGE.lastOrder, JSON.stringify(next));
+    return next;
+  }
+
+  function orderSetStatus(id, status, note) {
+    if (!ORDER_STATUSES[status]) return null;
+    const order = orderGet(id);
+    if (!order) return null;
+    const now = new Date().toISOString();
+    const history = Array.isArray(order.history) ? order.history.slice() : [];
+    history.push({ status, note: String(note || "").trim(), at: now });
+    return orderUpsert({ ...order, status, updatedAt: now, history });
+  }
+
+  function orderArchive(id) {
+    const order = orderGet(id);
+    if (!order) return null;
+    return orderUpsert({ ...order, archived: true, updatedAt: new Date().toISOString() });
+  }
+
+  function orderRestore(id) {
+    const order = orderGet(id);
+    if (!order) return null;
+    return orderUpsert({ ...order, archived: false, updatedAt: new Date().toISOString() });
+  }
+
+  function ordersForAccount(account) {
+    const acc = account || getAccount();
+    if (!acc?.phoneKey) return [];
+    return ordersLoad().filter((order) => phoneDigits(order.customer?.phone) === acc.phoneKey);
+  }
+
+  function orderStatusLabel(status) {
+    return ORDER_STATUSES[status] || ORDER_STATUSES.pending;
+  }
+
   function setTheme(theme) {
     const next = theme === "dark" ? "dark" : "light";
     document.documentElement.setAttribute("data-theme", next);
@@ -372,6 +466,8 @@
         return '<svg viewBox="0 0 24 24" ' + common + '><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.2-3.2"/></svg>';
       case "cart":
         return '<svg viewBox="0 0 24 24" ' + common + '><path d="M6 7h15l-1.5 8H8L6 4H3"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>';
+      case "orders":
+        return '<svg viewBox="0 0 24 24" ' + common + '><path d="M4 7l8-4 8 4-8 4-8-4z"/><path d="M4 7v10l8 4 8-4V7"/><path d="M12 11v10"/></svg>';
       case "close":
         return '<svg viewBox="0 0 24 24" ' + common + '><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>';
       case "theme":
@@ -575,6 +671,16 @@
     cartCount,
     cartSubtotal,
     shippingFee,
+    ORDER_STATUSES,
+    ordersLoad,
+    ordersSave,
+    orderGet,
+    orderUpsert,
+    orderSetStatus,
+    orderArchive,
+    orderRestore,
+    ordersForAccount,
+    orderStatusLabel,
     initTheme,
     setTheme,
     toast,
