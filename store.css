@@ -156,14 +156,13 @@ html[data-theme="dark"] .app-header {
 }
 
 .brand-mark {
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  background:
-    radial-gradient(circle at 30% 30%, rgba(15, 118, 110, 0.28), transparent 60%),
-    radial-gradient(circle at 70% 70%, rgba(180, 83, 9, 0.20), transparent 60%),
-    linear-gradient(180deg, rgba(18, 19, 22, 0.06), rgba(18, 19, 22, 0));
+  width: 46px;
+  height: 46px;
+  border-radius: 8px;
+  background: #141414 url("assets/store/evil-logo.png") center / cover no-repeat;
   border: 1px solid var(--border);
+  box-shadow: 0 8px 18px rgba(18, 19, 22, 0.14);
+  flex: 0 0 auto;
 }
 
 .brand-text {
@@ -836,6 +835,7 @@ html[dir="rtl"] .drawer.open {
 .slider-track {
   height: 100%;
   display: flex;
+  direction: ltr;
   transform: translate3d(0, 0, 0);
   transition: transform 200ms ease;
 }
@@ -1119,6 +1119,187 @@ html[data-theme="dark"] .slider-dots {
   font-size: 0.95rem;
 }
 
+.track-result,
+.orders-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.order-card,
+.order-mini {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.order-card {
+  display: grid;
+  gap: 14px;
+  padding: 14px;
+}
+
+.order-head,
+.order-meta {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.order-id {
+  display: block;
+  margin-top: 3px;
+  font-size: 1.05rem;
+  direction: ltr;
+  text-align: right;
+}
+
+.order-meta > div {
+  display: grid;
+  gap: 3px;
+  min-width: 130px;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  padding: 6px 10px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  background: var(--surface-2);
+}
+
+.status-pending {
+  color: #8a5b00;
+  border-color: rgba(180, 83, 9, 0.28);
+  background: rgba(180, 83, 9, 0.08);
+}
+
+.status-approved {
+  color: var(--accent);
+  border-color: rgba(15, 118, 110, 0.28);
+  background: rgba(15, 118, 110, 0.08);
+}
+
+.status-shipped {
+  color: #1d4ed8;
+  border-color: rgba(29, 78, 216, 0.25);
+  background: rgba(29, 78, 216, 0.08);
+}
+
+.status-delivered {
+  color: #15803d;
+  border-color: rgba(21, 128, 61, 0.25);
+  background: rgba(21, 128, 61, 0.08);
+}
+
+.status-rejected,
+.status-cancelled {
+  color: var(--danger);
+  border-color: rgba(180, 35, 24, 0.24);
+  background: rgba(180, 35, 24, 0.08);
+}
+
+.timeline {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+  list-style: none;
+}
+
+.timeline li {
+  position: relative;
+  display: grid;
+  gap: 2px;
+  padding-inline-start: 24px;
+}
+
+.timeline li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 4px;
+  top: 6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.order-actions {
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+}
+
+.order-mini {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+  padding: 12px;
+  cursor: pointer;
+  text-align: start;
+}
+
+.order-mini:hover {
+  background: var(--surface-2);
+}
+
+.admin-orders {
+  display: grid;
+  gap: 12px;
+}
+
+.admin-order-card {
+  display: grid;
+  gap: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 12px;
+}
+
+.admin-order-details {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  background: var(--surface-2);
+}
+
+.admin-order-details summary {
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.order-details-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.order-details-grid > div {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.order-details-grid strong {
+  overflow-wrap: anywhere;
+}
+
+.rejection-field {
+  margin-top: 4px;
+}
+
+.admin-order-card .order-actions {
+  margin-top: 4px;
+}
+
 .hr {
   height: 1px;
   background: var(--border);
@@ -1136,6 +1317,10 @@ html[data-theme="dark"] .slider-dots {
 .admin-products {
   display: grid;
   gap: 10px;
+}
+
+.admin-orders-panel {
+  grid-column: 1 / -1;
 }
 
 .product-row {
@@ -1224,6 +1409,10 @@ html[data-theme="dark"] .slider-dots {
   }
 
   .row-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .order-details-grid {
     grid-template-columns: 1fr;
   }
 }
