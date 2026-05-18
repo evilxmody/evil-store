@@ -2,9 +2,8 @@
 
 <div align="center">
 
-<img src="https://img.shields.io/github/stars/evilxmody/evil-store?style=for-the-badge&color=red">
-<img src="https://img.shields.io/github/forks/evilxmody/evil-store?style=for-the-badge&color=black">
-<img src="https://img.shields.io/github/license/evilxmody/evil-store?style=for-the-badge&color=darkred">
+<img src="https://img.shields.io/badge/HTML5-100%25-E34F26?style=for-the-badge&logo=html5&logoColor=white">
+<img src="https://img.shields.io/badge/CSS3-100%25-1572B6?style=for-the-badge&logo=css&logoColor=white">
 <img src="https://img.shields.io/github/languages/top/evilxmody/evil-store?style=for-the-badge&color=red">
 
 ### ⚡ Modern Store Website Built With Pure Frontend Magic
@@ -78,12 +77,12 @@ https://github.com/evilxmody/evil-store
 <div align="center">
 
 ### 🖥️ Home Page
-<img src="./assets/screenshots/home.png" width="800"/>
+<img src="./assets/screenshots/1.png" width="800"/>
 
 ### 🛒 Products Section
-<img src="./assets/screenshots/proudct.png" width="800"/>
+<img src="./assets/screenshots/2.png" width="800"/>
 <br>
-<img src="./assets/screenshots/1.png" width="800"/>
+<img src="./assets/screenshots/3.png" width="800"/>
 
 ### 📱 Mobile View
 <img src="./assets/screenshots/mobile.jpeg" width="300"/>
@@ -109,17 +108,8 @@ If you want major changes, open an issue first to discuss what you would like to
 
 ---
 
-## 📜 License
-
-This project is licensed under the MIT License.
-
----
-
 <div align="center">
 
 ### 💀 Made With Passion By Mohamed
 
 ⭐ Don't forget to star the repo if you like it.
-
-</div>
-
