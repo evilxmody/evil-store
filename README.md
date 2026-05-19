@@ -23,7 +23,7 @@
 - 📦 Dynamic Order Tracking
 - ✅ Admin Dashboard
 - ⚙️ GitHub JSON Database Workflow
-- 🌃%🌇 Light & Dark Themes
+- 🌙 Light & Dark Themes
 - 📲 Mobile Admin Support
 - ✅ Real-Time Order Status Updates
 - ✅ Responsive UI/UX
@@ -58,9 +58,12 @@ The system allows:
 - Shipping state management
 - Theme switching (Light / Dark)
 - Mobile-friendly administration
-
+<sub>
 All changes are synchronized directly with GitHub, creating a backend-like experience without using traditional servers or databases.
+</sub>
+
 ---
+
 ## 📂 Project Structure
 
 ```bash
@@ -91,42 +94,43 @@ https://github.com/evilxmody/evil-store
 ---
 
 ## 📸 Screenshots
-
-> show me yor screen shots for my repo 👀
-
-## 📸 Screenshots
-
+Add your screenshots here 👀
 <div align="center">
 
-### 🖥️ Home Page
+          🖥️ Home Page
 <img src="./assets/screenshots/1.png" width="800"/>
 
-### 🛒 Products Section
+         🛒 Products Section
 <img src="./assets/screenshots/2.png" width="800"/>
 <br>
 <img src="./assets/screenshots/3.png" width="800"/>
 
-### 📱 Mobile View
+           📱 Mobile View
 <img src="./assets/screenshots/mobile.jpeg" width="300"/>
 
 </div>
 
 ---
 
-## 🧠 Future Improvements
+## 🚀 Upcoming Enhancements
 
-- 🛍️ Add Product API
-- 💳 Payment Integration
-- 🔐 Authentication System
-- 🌙 Advanced Theme Customization
-- 📦 Shopping Cart System
-
----
+- 📊 Advanced Analytics Dashboard
+- 🤖 AI Product Recommendations
+- 📧 Email & Notification System
+- 🌍 Multi-Language Support
+- ☁️ Cloud Database Integration
+- 📱 Progressive Web App (PWA)
 
 
 <div align="center">
 
- # 👑 Author
+<h1 align="center">
+  👑 Author
+</h1>
+
+<p align="center">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=26&pause=1000&color=FFFFFF&center=true&vCenter=true&width=500&lines=Built+and+Designed+By+Mohamed+Said;Frontend+Developer;UI%2FUX+Enthusiast;Creative+Web+Builder" />
+</p>
 
 Built and designed with passion by **Mohamed Said**.
 
