@@ -16,7 +16,7 @@ window.STORE_CONFIG = {
 window.STORE_PRODUCTS = [
   {
     "id": "p-898d491c-19df53dea09",
-    "name": "lacoste",
+    "name": "lacoste2",
     "sku": "lacoste-xxx",
     "stock": 3,
     "price": 500,
