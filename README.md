@@ -20,13 +20,13 @@
 
 ## ✨ Features
 
--📦 Dynamic Order Tracking
--✅ Admin Dashboard
--⚙️ GitHub JSON Database Workflow
--🌃%🌇 Light & Dark Themes
--📲 Mobile Admin Support
--✅ Real-Time Order Status Updates
--✅ Responsive UI/UX
+- 📦 Dynamic Order Tracking
+- ✅ Admin Dashboard
+- ⚙️ GitHub JSON Database Workflow
+- 🌃%🌇 Light & Dark Themes
+- 📲 Mobile Admin Support
+- ✅ Real-Time Order Status Updates
+- ✅ Responsive UI/UX
 - 🖤 Modern Dark UI
 - ⚡ Fast & Responsive
 - 📱 Mobile Friendly
