@@ -20,6 +20,13 @@
 
 ## ✨ Features
 
+-📦 Dynamic Order Tracking
+-✅ Admin Dashboard
+-⚙️ GitHub JSON Database Workflow
+-🌃%🌇 Light & Dark Themes
+-📲 Mobile Admin Support
+-✅ Real-Time Order Status Updates
+-✅ Responsive UI/UX
 - 🖤 Modern Dark UI
 - ⚡ Fast & Responsive
 - 📱 Mobile Friendly
@@ -38,7 +45,22 @@
 - Responsive Design
 
 ---
+## 🧠 System Workflow
 
+EVIL STORE uses a lightweight dynamic workflow powered by GitHub-hosted JSON data.
+
+Products, orders, themes, and tracking statuses are managed through a custom admin dashboard with mobile support.
+
+The system allows:
+- Dynamic order tracking
+- Real-time status updates
+- Order approval / rejection handling
+- Shipping state management
+- Theme switching (Light / Dark)
+- Mobile-friendly administration
+
+All changes are synchronized directly with GitHub, creating a backend-like experience without using traditional servers or databases.
+---
 ## 📂 Project Structure
 
 ```bash
@@ -101,15 +123,37 @@ https://github.com/evilxmody/evil-store
 
 ---
 
-## 🤝 Contributing
-
-Pull requests are welcome.  
-If you want major changes, open an issue first to discuss what you would like to change.
-
----
 
 <div align="center">
 
-### 💀 Made With Passion By Mohamed
+ # 👑 Author
 
-⭐ Don't forget to star the repo if you like it.
+Built and designed with passion by **Mohamed Said**.
+
+# 🌐 Connect With Me
+
+<p align="center">
+
+<a href="https://github.com/evilxmody">
+<img src="https://img.shields.io/badge/GitHub-111111?style=for-the-badge&logo=github&logoColor=white">
+</a>
+
+<a href="https://www.facebook.com/EvilxMody">
+<img src="https://img.shields.io/badge/Facebook-111111?style=for-the-badge&logo=facebook&logoColor=white">
+</a>
+
+<a href="https://www.instagram.com/evilxmody">
+<img src="https://img.shields.io/badge/Instagram-111111?style=for-the-badge&logo=instagram&logoColor=white">
+</a>
+
+<a href="https://wa.me/201124145209">
+<img src="https://img.shields.io/badge/WhatsApp-111111?style=for-the-badge&logo=whatsapp&logoColor=white">
+</a>
+
+<a href="https://www.linkin1.com/evilxmody0">
+<img src="https://img.shields.io/badge/Linkin1-111111?style=for-the-badge&logo=googlechrome&logoColor=white">
+</a>
+
+</p>
+
+If you like this project, don't forget to leave a star on the repository ⭐
