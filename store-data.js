@@ -15,8 +15,26 @@ window.STORE_CONFIG = {
 
 window.STORE_PRODUCTS = [
   {
+    "id": "p-c06801a8-19e41be5162",
+    "name": "Test",
+    "sku": "",
+    "stock": 20,
+    "price": 10,
+    "compareAt": 5,
+    "category": "أخرى",
+    "badge": "Mody",
+    "images": [
+      "assets/store/mpd1c4fg-1a5f-E092152C-CE16-4684-BF45-D4EA34B467CE.jpeg"
+    ],
+    "description": "V",
+    "highlights": [
+      "B"
+    ],
+    "specs": []
+  },
+  {
     "id": "p-898d491c-19df53dea09",
-    "name": "lacoste2",
+    "name": "lacoste",
     "sku": "lacoste-xxx",
     "stock": 3,
     "price": 500,
