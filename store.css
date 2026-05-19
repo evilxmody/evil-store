@@ -47,6 +47,41 @@ body {
   line-height: 1.45;
 }
 
+@keyframes pageFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes itemFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes brandGlow {
+  0%,
+  100% {
+    box-shadow: 0 8px 18px rgba(18, 19, 22, 0.14);
+  }
+
+  50% {
+    box-shadow: 0 10px 26px rgba(15, 118, 110, 0.22);
+  }
+}
+
 .has-custom-cursor,
 .has-custom-cursor a,
 .has-custom-cursor button,
@@ -163,6 +198,7 @@ html[data-theme="dark"] .app-header {
   border: 1px solid var(--border);
   box-shadow: 0 8px 18px rgba(18, 19, 22, 0.14);
   flex: 0 0 auto;
+  animation: brandGlow 4.4s ease-in-out infinite;
 }
 
 .brand-text {
@@ -302,6 +338,7 @@ html[data-theme="dark"] .app-header {
 
 .main {
   padding: 20px 0 56px;
+  animation: pageFadeUp 420ms ease both;
 }
 
 .grid-head {
@@ -345,6 +382,27 @@ html[data-theme="dark"] .app-header {
   transition: box-shadow 160ms ease, transform 160ms ease;
   will-change: transform;
   cursor: pointer;
+  animation: itemFadeUp 420ms ease both;
+}
+
+.products-grid .card:nth-child(2) {
+  animation-delay: 35ms;
+}
+
+.products-grid .card:nth-child(3) {
+  animation-delay: 70ms;
+}
+
+.products-grid .card:nth-child(4) {
+  animation-delay: 105ms;
+}
+
+.products-grid .card:nth-child(5) {
+  animation-delay: 140ms;
+}
+
+.products-grid .card:nth-child(n + 6) {
+  animation-delay: 165ms;
 }
 
 .card:hover {
@@ -450,6 +508,7 @@ html[data-theme="dark"] .tag {
   min-height: 40px;
   text-align: center;
   white-space: nowrap;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
 }
 
 .btn:focus-visible {
@@ -459,6 +518,7 @@ html[data-theme="dark"] .tag {
 
 .btn:hover {
   background: var(--surface-2);
+  transform: translateY(-1px);
 }
 
 .btn-primary {
@@ -750,6 +810,7 @@ html[dir="rtl"] .drawer.open {
 /* Pages */
 .page {
   padding: 18px 0 56px;
+  animation: pageFadeUp 420ms ease both;
 }
 
 .crumbs {
@@ -783,6 +844,19 @@ html[dir="rtl"] .drawer.open {
   background: var(--surface);
   border-radius: var(--radius);
   padding: 14px;
+  animation: itemFadeUp 420ms ease both;
+}
+
+.sync-panel {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  padding: 12px;
+}
+
+.sync-panel summary {
+  cursor: pointer;
+  font-weight: 800;
 }
 
 .gallery {
@@ -1420,5 +1494,16 @@ html[data-theme="dark"] .slider-dots {
 @media (max-width: 480px) {
   .container {
     width: calc(100% - 20px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }

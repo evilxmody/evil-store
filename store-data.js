@@ -27,7 +27,7 @@ window.STORE_PRODUCTS = [
       "assets/store/lacoste2.jpg",
       "assets/store/lacoste3.jpg",
       "assets/store/lacoste1.jpg",
-      "assets/store/lacoste"
+      "assets/store/lacoste.jpg"
     ],
     "description": "اسوره لاكوست ميرور",
     "highlights": [

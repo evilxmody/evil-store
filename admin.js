@@ -29,6 +29,212 @@
     textarea.dispatchEvent(new Event("input", { bubbles: true }));
   }
 
+  const GITHUB_SETTINGS_KEY = "evil_store_github_sync_v1";
+
+  function inferGithubDefaults() {
+    const host = window.location.hostname;
+    const firstPathPart = window.location.pathname.split("/").filter(Boolean)[0] || "";
+    const pathRepo = firstPathPart && !firstPathPart.includes(".") ? firstPathPart : "evil-store";
+    const owner = host.endsWith(".github.io") ? host.replace(".github.io", "") : "";
+    return { owner, repo: pathRepo, branch: "main", dataPath: "store-data.js", token: "" };
+  }
+
+  function readGithubSettings() {
+    const defaults = inferGithubDefaults();
+    const stored = Storefront.safeJsonParse(Storefront.loadFromStorage(GITHUB_SETTINGS_KEY) || "null", null);
+    return {
+      owner: String(stored?.owner || defaults.owner || "").trim(),
+      repo: String(stored?.repo || defaults.repo || "").trim(),
+      branch: String(stored?.branch || defaults.branch || "main").trim(),
+      dataPath: String(stored?.dataPath || defaults.dataPath || "store-data.js").trim(),
+      token: String(stored?.token || "").trim()
+    };
+  }
+
+  function saveGithubSettings(settings) {
+    Storefront.saveToStorage(GITHUB_SETTINGS_KEY, JSON.stringify(settings));
+  }
+
+  function fillGithubSettings() {
+    const settings = readGithubSettings();
+    const fields = {
+      githubOwner: settings.owner,
+      githubRepo: settings.repo,
+      githubBranch: settings.branch,
+      githubDataPath: settings.dataPath,
+      githubToken: settings.token
+    };
+    Object.entries(fields).forEach(([id, value]) => {
+      const el = qs(id);
+      if (el) el.value = value;
+    });
+  }
+
+  function collectGithubSettings() {
+    return {
+      owner: String(qs("githubOwner")?.value || "").trim(),
+      repo: String(qs("githubRepo")?.value || "").trim(),
+      branch: String(qs("githubBranch")?.value || "main").trim(),
+      dataPath: String(qs("githubDataPath")?.value || "store-data.js").trim(),
+      token: String(qs("githubToken")?.value || "").trim()
+    };
+  }
+
+  function requireGithubSettings() {
+    const settings = collectGithubSettings();
+    if (!settings.owner || !settings.repo || !settings.branch || !settings.dataPath || !settings.token) {
+      Storefront.toast("بيانات GitHub ناقصة", "املأ Owner / Repo / Branch / Token");
+      return null;
+    }
+    saveGithubSettings(settings);
+    return settings;
+  }
+
+  function githubContentUrl(settings, path) {
+    const cleanPath = String(path || settings.dataPath)
+      .replace(/^\/+/, "")
+      .split("/")
+      .map(encodeURIComponent)
+      .join("/");
+    return "https://api.github.com/repos/" + encodeURIComponent(settings.owner) + "/" + encodeURIComponent(settings.repo) + "/contents/" + cleanPath;
+  }
+
+  function githubHeaders(settings) {
+    return {
+      Accept: "application/vnd.github+json",
+      Authorization: "Bearer " + settings.token,
+      "X-GitHub-Api-Version": "2022-11-28"
+    };
+  }
+
+  function toBase64Utf8(text) {
+    const bytes = new TextEncoder().encode(text);
+    let binary = "";
+    bytes.forEach((byte) => {
+      binary += String.fromCharCode(byte);
+    });
+    return btoa(binary);
+  }
+
+  function fromBase64Utf8(text) {
+    const binary = atob(String(text || "").replace(/\s/g, ""));
+    const bytes = Uint8Array.from(binary, (ch) => ch.charCodeAt(0));
+    return new TextDecoder().decode(bytes);
+  }
+
+  async function githubGetFile(settings, path) {
+    const url = githubContentUrl(settings, path) + "?ref=" + encodeURIComponent(settings.branch);
+    const res = await fetch(url, { headers: githubHeaders(settings) });
+    if (res.status === 404) return null;
+    if (!res.ok) throw new Error("GitHub GET failed: " + res.status);
+    return res.json();
+  }
+
+  async function githubPutFile(settings, path, content, message) {
+    const current = await githubGetFile(settings, path);
+    const body = {
+      message,
+      content: toBase64Utf8(content),
+      branch: settings.branch
+    };
+    if (current?.sha) body.sha = current.sha;
+
+    const res = await fetch(githubContentUrl(settings, path), {
+      method: "PUT",
+      headers: { ...githubHeaders(settings), "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error("GitHub PUT failed: " + res.status + " " + text.slice(0, 180));
+    }
+    return res.json();
+  }
+
+  async function githubPutBase64File(settings, path, base64Content, message) {
+    const current = await githubGetFile(settings, path);
+    const body = {
+      message,
+      content: String(base64Content || ""),
+      branch: settings.branch
+    };
+    if (current?.sha) body.sha = current.sha;
+
+    const res = await fetch(githubContentUrl(settings, path), {
+      method: "PUT",
+      headers: { ...githubHeaders(settings), "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error("GitHub image upload failed: " + res.status + " " + text.slice(0, 180));
+    }
+    return res.json();
+  }
+
+  function buildStoreDataJs(config, products) {
+    return (
+      "window.STORE_CONFIG = " +
+      JSON.stringify(config, null, 2) +
+      ";\n\n" +
+      "window.STORE_PRODUCTS = " +
+      JSON.stringify(products, null, 2) +
+      ";\n"
+    );
+  }
+
+  function parseStoreDataJs(code) {
+    const scope = {};
+    Function("window", String(code || "") + "\nreturn window;")(scope);
+    return {
+      config: scope.STORE_CONFIG || {},
+      products: Array.isArray(scope.STORE_PRODUCTS) ? scope.STORE_PRODUCTS : []
+    };
+  }
+
+  function safeFilename(name) {
+    const ext = String(name || "image.jpg").split(".").pop().toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+    const base = String(name || "product")
+      .replace(/\.[^.]+$/, "")
+      .trim()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-zA-Z0-9._-]/g, "")
+      .slice(0, 44) || "product";
+    return Date.now().toString(36) + "-" + Math.random().toString(16).slice(2, 6) + "-" + base + "." + ext;
+  }
+
+  async function uploadImagesToGithub(files, textarea) {
+    const settings = requireGithubSettings();
+    if (!settings) return;
+    const list = Array.from(files || []);
+    if (!list.length) return;
+    Storefront.toast("جاري رفع الصور", String(list.length) + " صورة");
+
+    for (const file of list) {
+      const path = "assets/store/" + safeFilename(file.name);
+      const dataUrl = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result || ""));
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+      const base64 = dataUrl.split(",")[1] || "";
+      await githubPutBase64File(settings, path, base64, "Upload product image " + path);
+      appendImagePath(textarea, path);
+    }
+
+    Storefront.toast("تم رفع الصور", "اتضافت مسارات الصور للمنتج");
+  }
+
+  async function publishDataToGithub(products) {
+    const settings = requireGithubSettings();
+    if (!settings) return;
+    const config = readSettings();
+    const js = buildStoreDataJs(config, products);
+    await githubPutFile(settings, settings.dataPath, js, "Update store products from admin");
+    Storefront.toast("اتنشر على GitHub", settings.dataPath);
+  }
+
   function fmtDate(value) {
     if (!value) return "";
     try {
@@ -213,7 +419,28 @@
       const path = window.prompt("اسم الصورة أو المسار", "product-new.jpg");
       appendImagePath(imagesInput, path);
     });
+    const uploadImagesInput = document.createElement("input");
+    uploadImagesInput.type = "file";
+    uploadImagesInput.accept = "image/*";
+    uploadImagesInput.multiple = true;
+    uploadImagesInput.hidden = true;
+    const uploadImagesBtn = document.createElement("button");
+    uploadImagesBtn.type = "button";
+    uploadImagesBtn.className = "btn btn-primary";
+    uploadImagesBtn.textContent = "رفع صور";
+    uploadImagesBtn.addEventListener("click", () => uploadImagesInput.click());
+    uploadImagesInput.addEventListener("change", async () => {
+      try {
+        await uploadImagesToGithub(uploadImagesInput.files, imagesInput);
+      } catch (err) {
+        Storefront.toast("فشل رفع الصور", err.message || "راجع بيانات GitHub");
+      } finally {
+        uploadImagesInput.value = "";
+      }
+    });
     imageTools.appendChild(addImagePathBtn);
+    imageTools.appendChild(uploadImagesBtn);
+    imageTools.appendChild(uploadImagesInput);
 
     const descInput = document.createElement("textarea");
     descInput.rows = 3;
@@ -632,10 +859,15 @@
     const importText = qs("importText");
     const applyImport = qs("applyImport");
     const productSearch = qs("productSearch");
+    const saveGithubSettingsBtn = qs("saveGithubSettings");
+    const publishGithubBtn = qs("publishGithub");
+    const loadGithubDataBtn = qs("loadGithubData");
     const ordersHost = qs("ordersHost");
     const refreshOrders = qs("refreshOrders");
     const ordersArchiveHost = qs("ordersArchiveHost");
     const refreshArchive = qs("refreshArchive");
+
+    fillGithubSettings();
 
     function renderProducts(products) {
       if (!host) return;
@@ -706,6 +938,69 @@
         }
         Storefront.saveToStorage(Storefront.STORAGE.products, JSON.stringify(products));
         Storefront.toast("تم الحفظ", "المنتجات");
+      });
+    }
+
+    if (saveGithubSettingsBtn) {
+      saveGithubSettingsBtn.addEventListener("click", () => {
+        const settings = collectGithubSettings();
+        if (!settings.owner || !settings.repo || !settings.branch || !settings.dataPath || !settings.token) {
+          Storefront.toast("بيانات ناقصة", "املأ بيانات GitHub كلها");
+          return;
+        }
+        saveGithubSettings(settings);
+        Storefront.toast("تم حفظ الربط", settings.owner + "/" + settings.repo);
+      });
+    }
+
+    if (publishGithubBtn) {
+      publishGithubBtn.addEventListener("click", async () => {
+        if (!host) return;
+        const products = collectProductsFromDom(host);
+        if (!products.length) {
+          Storefront.toast("مفيش منتجات", "اضف منتج واحد على الأقل");
+          return;
+        }
+        if (!validateUniqueIds(products)) {
+          Storefront.toast("IDs متكررة", "لازم كل منتج يكون له ID مختلف");
+          return;
+        }
+        try {
+          publishGithubBtn.disabled = true;
+          publishGithubBtn.textContent = "جاري النشر...";
+          Storefront.saveToStorage(Storefront.STORAGE.products, JSON.stringify(products));
+          await publishDataToGithub(products);
+        } catch (err) {
+          Storefront.toast("فشل النشر", err.message || "راجع بيانات GitHub");
+        } finally {
+          publishGithubBtn.disabled = false;
+          publishGithubBtn.textContent = "نشر على GitHub";
+        }
+      });
+    }
+
+    if (loadGithubDataBtn) {
+      loadGithubDataBtn.addEventListener("click", async () => {
+        const settings = requireGithubSettings();
+        if (!settings) return;
+        try {
+          loadGithubDataBtn.disabled = true;
+          loadGithubDataBtn.textContent = "جاري التحميل...";
+          const file = await githubGetFile(settings, settings.dataPath);
+          if (!file?.content) throw new Error("ملف البيانات مش موجود");
+          const parsed = parseStoreDataJs(fromBase64Utf8(file.content));
+          Storefront.saveToStorage(Storefront.STORAGE.config, JSON.stringify(parsed.config));
+          Storefront.saveToStorage(Storefront.STORAGE.products, JSON.stringify(parsed.products));
+          config = Storefront.getConfig();
+          fillSettings(config);
+          renderProducts(Storefront.loadProducts());
+          Storefront.toast("تم التحميل", "آخر نسخة من GitHub");
+        } catch (err) {
+          Storefront.toast("فشل التحميل", err.message || "راجع بيانات GitHub");
+        } finally {
+          loadGithubDataBtn.disabled = false;
+          loadGithubDataBtn.textContent = "تحميل من GitHub";
+        }
       });
     }
 

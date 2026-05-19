@@ -7,7 +7,7 @@
     <title>لوحة التحكم</title>
     <link rel="stylesheet" href="store.css" />
     <link rel="icon" href="assets/store/evil-logo.png" type="image/png" />
-    <script src="data/store-data.js" defer></script>
+    <script src="store-data.js" defer></script>
     <script src="store-core.js" defer></script>
     <script src="admin.js" defer></script>
   </head>
@@ -101,6 +101,7 @@
 
           <div class="form-grid">
             <button class="btn btn-primary" type="button" id="saveProducts">حفظ المنتجات</button>
+            <button class="btn btn-primary" type="button" id="publishGithub">نشر على GitHub</button>
             <div class="split">
               <button class="btn btn-ghost" type="button" id="exportJson">تصدير JSON</button>
               <button class="btn btn-ghost" type="button" id="exportJs">تصدير JS</button>
@@ -110,6 +111,45 @@
               <button class="btn btn-danger" type="button" id="resetProducts">مسح التعديلات</button>
             </div>
           </div>
+
+          <hr class="hr" />
+
+          <details class="sync-panel" open>
+            <summary class="subtle-link">ربط GitHub للموبايل</summary>
+            <div class="form-grid" style="margin-top: 10px">
+              <div class="split">
+                <label class="field">
+                  <span class="field-label">Owner</span>
+                  <input id="githubOwner" type="text" placeholder="username" autocomplete="off" />
+                </label>
+                <label class="field">
+                  <span class="field-label">Repo</span>
+                  <input id="githubRepo" type="text" placeholder="evil-store" autocomplete="off" />
+                </label>
+              </div>
+              <div class="split">
+                <label class="field">
+                  <span class="field-label">Branch</span>
+                  <input id="githubBranch" type="text" placeholder="main" autocomplete="off" />
+                </label>
+                <label class="field">
+                  <span class="field-label">ملف البيانات</span>
+                  <input id="githubDataPath" type="text" placeholder="store-data.js" autocomplete="off" />
+                </label>
+              </div>
+              <label class="field">
+                <span class="field-label">GitHub token</span>
+                <input id="githubToken" type="password" autocomplete="off" placeholder="Fine-grained token" />
+              </label>
+              <div class="drawer-actions" style="grid-template-columns: 1fr 1fr">
+                <button class="btn btn-primary" type="button" id="saveGithubSettings">حفظ الربط</button>
+                <button class="btn btn-ghost" type="button" id="loadGithubData">تحميل من GitHub</button>
+              </div>
+              <p class="muted tiny">
+                استخدم token بصلاحية Contents read/write للريبو ده فقط. التوكن بيتخزن على جهازك أنت.
+              </p>
+            </div>
+          </details>
 
           <div id="importPanel" style="margin-top: 14px; border-top: 1px solid var(--border); padding-top: 14px" hidden>
             <div class="grid-head" style="margin: 0 0 10px">
